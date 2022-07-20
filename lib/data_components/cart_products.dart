@@ -77,109 +77,116 @@ class Single_CartProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: ListTile(
-        leading: Image.asset(
-          '$cart_product_picture',
-          fit: BoxFit.fill,
-          // height: 80,
-          // width: 80,
-        ),
-        title: Container(
-          child: Text(
-            cart_product_name,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w800,
-              fontSize: 20,
+      color: Colors.white70,
+      elevation: 20,
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10, left: 5),
+            child: Image.asset(
+              '$cart_product_picture',
+              fit: BoxFit.cover,
+              height: 80,
+              width: 80,
             ),
           ),
-        ),
-        subtitle: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 4, 4, 4),
-                  child: Text(
-                    'Size: ',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
+                //=====PRODUCT NAME=======\\
+                Text(
+                  "Black dress",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 20,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 4, 4, 4),
-                  child: Text(
-                    '$cart_product_size',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    //=====PRODUCT SIZE=======\\
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0.0, 4, 4, 4),
+                      child: Text(
+                        'Size: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black45,
+                            fontSize: 16),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Text(
+                        '$cart_product_size',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green[800],
+                            fontSize: 16),
+                      ),
+                    ),
+                    //=====PRODUCT COLOR=======\\
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20.0, 8, 4, 4),
+                      child: Text(
+                        'Product Color:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black45,
+                            fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Text(
+                        '$cart_product_color',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green[800],
+                            fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 4, 4, 4),
+                //====PRODUCT PRICE====
+                Container(
+                  alignment: Alignment.topLeft,
                   child: Text(
-                    'Product Color:',
+                    '$cart_product_price',
                     style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 4, 4, 4),
-                  child: Text(
-                    '$cart_product_color',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15,
-                    ),
+                        fontWeight: FontWeight.w800,
+                        color: Colors.red,
+                        fontSize: 18),
                   ),
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                '₹$cart_product_price',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+          ),
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_drop_up),
                 ),
-              ),
+                Text(
+                  '$cart_product_quantity',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.red,
+                      fontSize: 15),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+              ],
             ),
-          ],
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_drop_up),
-            ),
-            Text(
-              '$cart_product_quantity',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_drop_down),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

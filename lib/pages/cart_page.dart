@@ -34,7 +34,7 @@ class _CartState extends State<Cart> {
             ),
             Expanded(
               child: MaterialButton(
-                color: Colors.red,
+                color: Colors.lightGreen,
                 onPressed: () {},
                 child: Text(
                   'Proceed to Buy',
