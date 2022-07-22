@@ -1,3 +1,5 @@
+import 'package:e_shoppie/pages/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/cart_page.dart';
@@ -69,6 +71,16 @@ class HomePageDrawer extends StatelessWidget {
               tileheading: 'About',
               tileIcon: Icons.help,
             ),
+            Divider(),
+            DrawerTile(
+              tileheading: 'Sign Out',
+              tileIcon: Icons.logout_rounded,
+              onTap: () async {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, LoginScreen.id, (route) => false);
+              },
+            )
           ],
         ),
       ),

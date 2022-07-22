@@ -2,6 +2,7 @@ import 'package:e_shoppie/pages/cart_page.dart';
 import 'package:e_shoppie/pages/home_page.dart';
 import 'package:e_shoppie/pages/item_details.dart';
 import 'package:e_shoppie/pages/login_screen.dart';
+import 'package:e_shoppie/pages/register_new_user_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
+        SignUp.id: (context) => SignUp(),
         LoginScreen.id: (context) => LoginScreen(),
         HomePage.id: (context) => HomePage(),
         ItemDetails.id: (context) => ItemDetails(),
