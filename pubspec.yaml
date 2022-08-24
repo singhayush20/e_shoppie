@@ -46,6 +46,8 @@ dependencies:
   shared_preferences: ^2.0.15
   fluttertoast: ^8.0.9
   firebase_database: ^9.0.20
+  provider: ^6.0.3
+  email_validator: ^2.1.16
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -69,7 +71,7 @@ flutter:
   uses-material-design: true
   assets:
     - images/
-    - images/brand_logo.jpg
+    - images/logo.jpg
     - images/categories/
     - images/products/
   # To add assets to your application, add an assets section, like this:

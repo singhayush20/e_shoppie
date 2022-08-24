@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 import 'CategoryItem.dart';
@@ -12,6 +14,10 @@ import 'CategoryItem.dart';
 //   Image(image: AssetImage('images/image6.jpeg')),
 //   Image(image: AssetImage('images/image7.jpeg')),
 // ];
+String username="username";
+String id="id";
+String profilePicture="profilePicture";
+String email="email";
 List<String> carousel_image_list = [
   'images/image1.jpg',
   'images/image2.JPG',

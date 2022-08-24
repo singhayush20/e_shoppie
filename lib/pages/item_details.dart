@@ -1,11 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_shoppie/common_widgets/drop_down_list.dart';
 import 'package:e_shoppie/pages/cart_page.dart';
-import 'package:e_shoppie/pages/home_page.dart';
 import 'package:e_shoppie/pages/product_details.dart';
-import 'package:e_shoppie/structure/constants.dart';
+import 'package:e_shoppie/specific_page_data/constants.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/drop_down_list.dart';
 
 class ItemDetails extends StatefulWidget {
   static final String id = 'Item Detials Page';
@@ -40,7 +38,12 @@ class _ItemDetailsState extends State<ItemDetails> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, Cart.id);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Cart(),
+                ),
+              );
             },
             icon: Icon(Icons.shopping_cart),
           ),

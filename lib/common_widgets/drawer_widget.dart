@@ -1,6 +1,6 @@
-import 'package:e_shoppie/pages/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:e_shoppie/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../pages/cart_page.dart';
 import 'drawer_tile.dart';
@@ -59,7 +59,12 @@ class HomePageDrawer extends StatelessWidget {
               tileheading: 'Cart',
               tileIcon: Icons.shopping_cart,
               onTap: () {
-                Navigator.popAndPushNamed(context, Cart.id);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Cart(),
+                  ),
+                );
               },
             ),
             Divider(),
@@ -76,9 +81,12 @@ class HomePageDrawer extends StatelessWidget {
               tileheading: 'Sign Out',
               tileIcon: Icons.logout_rounded,
               onTap: () async {
-                FirebaseAuth.instance.signOut();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, LoginScreen.id, (route) => false);
+                print('Entered signout onTap');
+                await Provider.of<UserProvider>(context, listen: false)
+                    .signOut();
+                // Navigator.popUntil(context, (route) => route.isFirst);
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => LoginScreen()));
               },
             )
           ],

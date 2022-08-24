@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:e_shoppie/provider/user_provider.dart';
+import 'package:e_shoppie/themes/lightTheme.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../db/user_services.dart';
-import 'home_page.dart';
+import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
   static final String id = 'Register Screen';
@@ -15,584 +13,369 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
-  final FirebaseAuth? firebaseAuth = FirebaseAuth.instance;
-  User? user;
-  UserServices userServices = new UserServices();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isVisible = true;
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
-  TextEditingController _NameTextController = TextEditingController();
-  String gender = "male";
-  String groupValue = 'male';
-  SharedPreferences? preferences;
-  bool isLoading = false;
-  bool isLoggedIn = false;
+  TextEditingController _middleNameTextController = TextEditingController();
+  TextEditingController _firstNameTextController = TextEditingController();
+  TextEditingController _lastNameTextController = TextEditingController();
 
-  bool _isVisible = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.purple[50],
-      body: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.05),
-                  child: Text(
-                    'E Shoppie'.toUpperCase(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black,
-                      fontSize: 50,
+    final screenHeight =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Consumer<UserProvider>(
+      builder: (context, provider, child) {
+        return SafeArea(
+          child: Scaffold(
+            key: _scaffoldKey,
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: Text('SignUp'),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+            ),
+            body: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(height: screenHeight * 0.02),
+
+                  //=====Form====
+                  Container(
+                    width: screenWidth * 0.90,
+                    height: screenHeight * 0.75,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                ),
-              ),
-
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.05),
-                child: Material(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.purple[400]!.withOpacity(0.9),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.05),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  cursorColor: Colors.black,
-                                  controller: _NameTextController,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintStyle: TextStyle(
-                                      color: Colors.white,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    //====IMAGE====
+                                    //====First Name====
+                                    SizedBox(
+                                      height: constraints.maxHeight * 0.02,
                                     ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white70),
+                                    //15
+                                    Row(
+                                      //15
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            height:
+                                                constraints.maxHeight * 0.15,
+                                            child: TextFormField(
+                                              cursorColor: Colors.black,
+                                              controller:
+                                                  _firstNameTextController,
+                                              keyboardType: TextInputType.name,
+                                              validator: (value) {
+                                                if (value!.isEmpty ||
+                                                    value.trim() == '') {
+                                                  return 'Name cannot be empty';
+                                                } else
+                                                  return null;
+                                              },
+                                              decoration:
+                                                  formInputDecoration.copyWith(
+                                                hintText: 'First Name',
+                                                prefixIcon: Icon(
+                                                  Icons.person,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: constraints.maxWidth * 0.02,
+                                        ),
+                                        //==== Middle Name====
+                                        Expanded(
+                                          child: Container(
+                                            height:
+                                                constraints.maxHeight * 0.15,
+                                            child: TextFormField(
+                                              cursorColor: Colors.black,
+                                              controller:
+                                                  _middleNameTextController,
+                                              keyboardType: TextInputType.name,
+                                              validator: (value) {
+                                                if (value!.isNotEmpty &&
+                                                    value.trim() == '') {
+                                                  return 'Middle should either be empty or should have valid characters';
+                                                } else
+                                                  return null;
+                                              },
+                                              decoration:
+                                                  formInputDecoration.copyWith(
+                                                hintText: 'Middle Name',
+                                                prefixIcon: Icon(
+                                                  Icons.person,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
-                                    hintText: "Name",
-                                    // border: OutlineInputBorder().,
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    // isDense:true
-                                  ),
-                                  keyboardType: TextInputType.name,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      Pattern pattern =
-                                          'The Name cannot be empty';
-                                      RegExp regex =
-                                          new RegExp(pattern.toString());
-                                      if (!regex.hasMatch(value))
-                                        return 'Name cannot be empty';
-                                      else
-                                        return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  // Text(
-                                  //   'Gender: ',
-                                  //   style: TextStyle(
-                                  //     color: Colors.black,
-                                  //     fontWeight: FontWeight.bold,
-                                  //   ),
-                                  // ),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                        'Male',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
+                                    //====Last Name=====  //15
+                                    Container(
+                                      height: constraints.maxHeight * 0.15,
+                                      child: TextFormField(
+                                        cursorColor: Colors.black,
+                                        controller: _lastNameTextController,
+                                        keyboardType: TextInputType.name,
+                                        validator: (value) {
+                                          if (value!.isEmpty ||
+                                              value.trim() == '') {
+                                            return 'Last name cannot be empty';
+                                          } else
+                                            return null;
+                                        },
+                                        decoration:
+                                            formInputDecoration.copyWith(
+                                          hintText: 'Last Name',
+                                          prefixIcon: Icon(
+                                            Icons.person,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
-                                      trailing: Radio(
-                                        fillColor:
-                                            MaterialStateColor.resolveWith(
-                                                (states) => Colors.white),
-                                        value: "male",
-                                        groupValue: groupValue,
-                                        onChanged: (e) => valueChanged(e),
-                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                        'Female',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
+                                    //=====Email====  //15
+                                    Container(
+                                      height: constraints.maxHeight * 0.15,
+                                      child: TextFormField(
+                                        obscureText: false,
+                                        cursorColor: Colors.black,
+                                        controller: _emailTextController,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Please enter email';
+                                          } else {
+                                            if (!EmailValidator.validate(
+                                                value)) {
+                                              return 'Wrong email id';
+                                            } else {
+                                              return null;
+                                            }
+                                          }
+                                        },
+                                        decoration:
+                                            formInputDecoration.copyWith(
+                                          hintText: 'Email',
+                                          prefixIcon: Icon(
+                                            Icons.email_sharp,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
-                                      trailing: Radio(
-                                        fillColor:
-                                            MaterialStateColor.resolveWith(
-                                                (states) => Colors.white),
-                                        value: "female",
-                                        groupValue: groupValue,
-                                        onChanged: (e) => valueChanged(e),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(4),
-                                child: TextFormField(
-                                  obscureText: false,
-                                  cursorColor: Colors.black,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  controller: _emailTextController,
-                                  decoration: InputDecoration(
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.white70),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                      ),
-
-                                      // labelText: "Email*",
-                                      hintStyle: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                      hintText: "Email",
-                                      // border: OutlineInputBorder().,
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.all(8),
-                                        child: Icon(
-                                          Icons.email_outlined,
-                                          color: Colors.white,
+                                    //=====Password=====  //15
+                                    Container(
+                                      height: constraints.maxHeight * 0.15,
+                                      child: TextFormField(
+                                        obscureText: _isVisible,
+                                        cursorColor: Colors.black,
+                                        controller: _passwordTextController,
+                                        decoration:
+                                            formInputDecoration.copyWith(
+                                          suffixIcon: IconButton(
+                                            icon: Icon(
+                                              // Based on passwordVisible state choose the icon
+                                              _isVisible
+                                                  ? Icons.visibility
+                                                  : Icons.visibility_off,
+                                              color: Colors.black,
+                                            ),
+                                            onPressed: () {
+                                              // Update the state i.e. toogle the state of passwordVisible variable
+                                              setState(() {
+                                                _isVisible = !_isVisible;
+                                              });
+                                            },
+                                          ),
+                                          hintText: 'Password',
+                                          prefixIcon: Icon(
+                                            Icons.lock,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      )
-                                      // isDense:true
-                                      ),
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      Pattern pattern =
-                                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                      RegExp regex =
-                                          new RegExp(pattern.toString());
-                                      if (!regex.hasMatch(value))
-                                        return 'Please make sure your email address is valid';
-                                      else
-                                        return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.02,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  obscureText: _isVisible,
-                                  cursorColor: Colors.black,
-                                  controller: _passwordTextController,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintStyle: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white70),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
-                                    hintText: "Password",
-                                    // border: OutlineInputBorder().,
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: Icon(
-                                        Icons.password,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    suffixIcon: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          // Based on passwordVisible state choose the icon
-                                          _isVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          // Update the state i.e. toogle the state of passwordVisible variable
-                                          setState(() {
-                                            _isVisible = !_isVisible;
-                                          });
+                                        keyboardType:
+                                            TextInputType.visiblePassword,
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Please enter password';
+                                          } else {
+                                            RegExp regex = RegExp(
+                                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                                            if (!regex.hasMatch(value)) {
+                                              return 'Enter valid password';
+                                            } else {
+                                              return null;
+                                            }
+                                          }
                                         },
                                       ),
                                     ),
-                                    // isDense:true
-                                  ),
-                                  keyboardType: TextInputType.visiblePassword,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      // Pattern pattern =
-                                      //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                      // RegExp regex =
-                                      //     new RegExp(pattern.toString());
-                                      // if (!regex.hasMatch(value))
-                                      //   return 'Please make sure your password is at least 8 characters long';
-                                      // else
-                                      //   return null;
-                                      if (value.isEmpty) {
-                                        return "The password field cannot be empty";
-                                      } else if (value.length < 8) {
-                                        return "Password length should be greater than 8";
-                                      }
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  obscureText: _isVisible,
-                                  cursorColor: Colors.black,
-                                  controller: _confirmPasswordController,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintStyle: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white70),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
-                                    hintText: "Confirm Password",
-                                    // border: OutlineInputBorder().,
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: Icon(
-                                        Icons.password,
-                                        color: Colors.white,
+                                    //=====Confirm Password====  //15
+                                    Container(
+                                      height: constraints.maxHeight * 0.15,
+                                      child: TextFormField(
+                                        obscureText: _isVisible,
+                                        cursorColor: Colors.black,
+                                        controller: _confirmPasswordController,
+                                        keyboardType:
+                                            TextInputType.visiblePassword,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "The password field cannot be empty!";
+                                          } else if (value.length < 8) {
+                                            return "The password length should be not less than 8";
+                                          } else if (_passwordTextController
+                                                  .text !=
+                                              value) {
+                                            return "Passwords do not match";
+                                          }
+                                          return null;
+                                        },
+                                        decoration:
+                                            formInputDecoration.copyWith(
+                                          hintText: 'Confirm Password',
+                                          prefixIcon: Icon(
+                                            Icons.lock,
+                                            color: Colors.black,
+                                          ),
+                                        ),
                                       ),
                                     ),
-
-                                    // isDense:true
-                                  ),
-                                  keyboardType: TextInputType.visiblePassword,
-                                  validator: (value) {
-                                    // if (value!.isEmpty) {
-                                    //   Pattern pattern =
-                                    //       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                    //   RegExp regex =
-                                    //       new RegExp(pattern.toString());
-                                    //   if (!regex.hasMatch(value))
-                                    //     return 'Please make sure your password is at least 8 characters long';
-                                    //   else if()
-                                    //     return null;
-                                    // }
-                                    if (value!.isEmpty) {
-                                      return "The password field cannot be empty!";
-                                    } else if (value.length < 8) {
-                                      return "The password length should be not less than 8";
-                                    } else if (_passwordTextController.text !=
-                                        value) {
-                                      return "Passwords do not match";
-                                    }
-                                    return null;
-                                  },
+                                    //10
+                                    Container(
+                                      height: constraints.maxHeight * 0.10,
+                                      child: Center(
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.purple[900]),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              if (!await provider.signUp(
+                                                _firstNameTextController.text,
+                                                _middleNameTextController.text,
+                                                _lastNameTextController.text,
+                                                _emailTextController.text,
+                                                _passwordTextController.text,
+                                              )) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            ' In Failed')));
+                                              }
+                                              Navigator.pop(context);
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    backgroundColor:
+                                                        Colors.black,
+                                                    content: Text('Failed')),
+                                              );
+                                            }
+                                          },
+                                          child: FittedBox(
+                                            fit: BoxFit.contain,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 2),
+                                              child: Text(
+                                                'Register',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: constraints.maxHeight * 0.1,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(30.0),
-                          color: Colors.purple[900],
-                          elevation: 0.0,
-                          child: MaterialButton(
-                            // minWidth: MediaQuery.of(context).size.width.,
-                            child: Text(
-                              'Sign Up and Register',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
                             ),
-                            onPressed: () async {
-                              //
-                              validateForm();
-                            },
-                          ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+
+                  Container(
+                    height: screenHeight * 0.04,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Already have an account? Log In!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      // Column(
-                      //   children: [
-                      //     TextButton(
-                      //       style: TextButton.styleFrom(
-                      //         textStyle: const TextStyle(fontSize: 20),
-                      //       ),
-                      //       onPressed: () {},
-                      //       child: const Text(
-                      //         'Forgot Password',
-                      //         style: TextStyle(
-                      //           color: Colors.white,
-                      //           decoration: TextDecoration.underline,
-                      //           fontWeight: FontWeight.bold,
-                      //         ),
-                      //       ),
-                      //     ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Log In',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-
-              // Padding(
-              //   padding: EdgeInsets.symmetric(
-              //       horizontal: MediaQuery.of(context).size.width * 0.05),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Expanded(
-              //         flex: 2,
-              //         child: Divider(
-              //           thickness: 2,
-              //           color: Colors.black,
-              //         ),
-              //       ),
-              //       Expanded(
-              //         flex: 1,
-              //         child: Text(
-              //           'OR'.toUpperCase(),
-              //           style: TextStyle(
-              //             fontWeight: FontWeight.w600,
-              //           ),
-              //           textAlign: TextAlign.center,
-              //         ),
-              //       ),
-              //       Expanded(
-              //         flex: 2,
-              //         child: Divider(
-              //           thickness: 2,
-              //           color: Colors.black,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.height * 0.05,
-              // ),
-              //====GOOGLE SIGN IN BUTTON====
-
-              //     Padding(
-              //       padding: EdgeInsets.symmetric(
-              //           horizontal: MediaQuery.of(context).size.width * 0.1),
-              //       child: Material(
-              //         borderRadius: BorderRadius.circular(30),
-              //         child: OutlinedButton(
-              //           style: OutlinedButton.styleFrom(
-              //             shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(30),
-              //             ),
-              //             backgroundColor: Colors.purple[900],
-              //             elevation: 10,
-              //             side: BorderSide(width: 0.5, color: Colors.red),
-              //           ),
-              //           child: Padding(
-              //             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              //             child: Row(
-              //               mainAxisSize: MainAxisSize.min,
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               children: <Widget>[
-              //                 Image(
-              //                   image: AssetImage("images/google_logo.png"),
-              //                   height: 35.0,
-              //                 ),
-              //                 Padding(
-              //                   padding: const EdgeInsets.only(left: 10),
-              //                   child: Text(
-              //                     'Sign in with Google',
-              //                     style: TextStyle(
-              //                       fontSize: 20,
-              //                       color: Colors.white,
-              //                       fontWeight: FontWeight.w600,
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //           onPressed: () async {
-              //             handleSignIn();
-              //           },
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              Visibility(
-                  visible: isLoading,
-                  child: Center(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: Colors.white.withOpacity(0.7),
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
                       ),
                     ),
-                  ))
-            ],
+                  ),
+                  Expanded(child: SizedBox(), flex: 4),
+                ],
+              ),
+            ),
           ),
-          // bottomNavigationBar:
-        ],
-      ),
+        );
+      },
     );
-  }
-
-  void isSignedIn() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
-    preferences = await SharedPreferences.getInstance();
-    if (isLoggedIn) {
-      Navigator.popAndPushNamed(context, HomePage.id);
-      setState(() {
-        // isLoading = false;
-      });
-    }
-  }
-
-  valueChanged(e) {
-    setState(() {
-      if (e == "male") {
-        groupValue = e;
-        gender = e;
-      } else if (e == 'female') {
-        groupValue = e;
-        gender = e;
-      }
-    });
-  }
-
-  Future validateForm() async {
-    setState(() {
-      isLoading = true;
-    });
-    FormState? formState = _formKey.currentState;
-    if (formState!.validate()) {
-      formState.reset();
-      User? currentUser = await FirebaseAuth.instance.currentUser;
-      if (currentUser == null) {
-        print('currentUser=null: true');
-        UserCredential credential = await firebaseAuth!
-            .createUserWithEmailAndPassword(
-                email: _emailTextController.text,
-                password: _passwordTextController.text);
-        user = credential.user;
-        FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
-          "id": user!.uid,
-          "email": user!.email,
-          "username": _NameTextController.text.toString(),
-          "gender": gender.toString()
-        });
-        // userServices.createUser(value.user!.uid.toString(), {
-        //   "username": value.user!.displayName,
-        //   "email": value.user!.email,
-        //   "id": value.user!.uid,
-        //   "gender": gender
-        // }).catchError((e) => {print(e.toString())})
-
-        print('User created');
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.pushNamedAndRemoveUntil(
-            context, HomePage.id, (route) => false);
-      }
-    }
   }
 }

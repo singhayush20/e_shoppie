@@ -1,12 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_shoppie/widgets/category_tiles.dart';
-import 'package:flutter/foundation.dart';
+import 'package:e_shoppie/common_widgets/category_tiles.dart';
+import 'package:e_shoppie/common_widgets/drawer_widget.dart';
+import 'package:e_shoppie/common_widgets/grid_components.dart';
+import 'package:e_shoppie/common_widgets/slider_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../structure/constants.dart';
-import '../widgets/drawer_widget.dart';
-import '../widgets/slider_indicator.dart';
-import '../widgets/grid_components.dart';
+import '../specific_page_data/constants.dart';
 import 'cart_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,16 +16,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController searchBarController = TextEditingController();
   int activeIndex = 0;
 
   final CarouselController controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppBarTheme.of(context).backgroundColor,
-        ),
         actions: [
           IconButton(
             onPressed: () {},
@@ -34,7 +32,12 @@ class _HomePageState extends State<HomePage> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, Cart.id);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Cart(),
+                ),
+              );
             },
             icon: Icon(Icons.shopping_cart),
           ),

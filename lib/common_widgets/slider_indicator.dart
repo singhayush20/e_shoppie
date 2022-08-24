@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../structure/constants.dart';
+import '../specific_page_data/constants.dart';
 
 class SliderIndicator extends StatelessWidget {
   const SliderIndicator({

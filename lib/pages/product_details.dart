@@ -1,7 +1,7 @@
+import 'package:e_shoppie/common_widgets/grid_components.dart';
 import 'package:flutter/material.dart';
 
-import '../structure/constants.dart';
-import '../widgets/grid_components.dart';
+import '../specific_page_data/constants.dart';
 
 class ProductDetail extends StatelessWidget {
   final String? productTag;
